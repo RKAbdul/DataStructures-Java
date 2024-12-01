@@ -1,5 +1,9 @@
 package org.uma.ed.datastructures.queue;
 
+import org.uma.ed.datastructures.stack.ArrayStack;
+
+import java.lang.reflect.Array;
+
 /**
  * This class represents a Queue data structure implemented using an array of elements.
  * The size of the array (capacity) is automatically increased when it runs out of capacity.
@@ -136,7 +140,15 @@ public class ArrayQueue<T> extends AbstractQueue<T> implements Queue<T> {
    * @return a new ArrayQueue with same elements and order as {@code that}.
    */
   public static <T> ArrayQueue<T> copyOf(ArrayQueue<T> that) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    ArrayQueue<T> copy = ArrayQueue.withCapacity(that.size() == 0 ? DEFAULT_INITIAL_CAPACITY : that.size());
+
+    int current = that.first;
+    for (int i = 0; i < that.size; i++) {
+      copy.enqueue(that.elements[current]);
+      current = copy.advance(current);
+    }
+
+    return copy;
   }
 
   /**
@@ -148,7 +160,18 @@ public class ArrayQueue<T> extends AbstractQueue<T> implements Queue<T> {
    * @return a new ArrayQueue with same elements and order as {@code that}.
    */
   public static <T> ArrayQueue<T> copyOf(Queue<T> that) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    ArrayQueue<T> copy = ArrayQueue.withCapacity(that.isEmpty() ? DEFAULT_INITIAL_CAPACITY : that.size());
+
+    while (!that.isEmpty()){
+      copy.enqueue(that.first());
+      that.dequeue();
+    }
+
+    for (int i = 0; i < copy.size(); i++) {
+      that.enqueue(copy.elements[i]);
+    }
+
+    return copy;
   }
 
   /**
@@ -157,7 +180,7 @@ public class ArrayQueue<T> extends AbstractQueue<T> implements Queue<T> {
    */
   @Override
   public boolean isEmpty() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    return this.size == 0;
   }
 
   /**
@@ -166,7 +189,7 @@ public class ArrayQueue<T> extends AbstractQueue<T> implements Queue<T> {
    */
   @Override
   public int size() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    return this.size;
   }
 
   /**
@@ -203,7 +226,10 @@ public class ArrayQueue<T> extends AbstractQueue<T> implements Queue<T> {
    */
   @Override
   public void enqueue(T element) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    ensureCapacity();
+    last = advance(last);
+    elements[last] = element;
+    size++;
   }
 
   /**
@@ -214,7 +240,8 @@ public class ArrayQueue<T> extends AbstractQueue<T> implements Queue<T> {
    */
   @Override
   public T first() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    if (isEmpty()) throw new EmptyQueueException("first on empty queue");
+    return elements[first];
   }
 
   /**
@@ -225,7 +252,10 @@ public class ArrayQueue<T> extends AbstractQueue<T> implements Queue<T> {
    */
   @Override
   public void dequeue() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    if (isEmpty()) throw new EmptyQueueException("dequeue on empty queue");
+    elements[first] = null;
+    first = advance(first);
+    size--;
   }
 
   /**
@@ -234,7 +264,9 @@ public class ArrayQueue<T> extends AbstractQueue<T> implements Queue<T> {
    */
   @Override
   public void clear() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    while(size != 0) {
+      dequeue();
+    }
   }
 
   /**

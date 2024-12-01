@@ -253,7 +253,7 @@ class LinkedListTest {
 
       // Assert
       assertEquals(1, list.size());
-      assertEquals(value, list.get(0));
+      assertEquals(value, list. get(0));
     }
 
     @Test

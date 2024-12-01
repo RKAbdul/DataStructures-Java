@@ -105,7 +105,9 @@ public class SortedLinkedSet<T> extends AbstractSortedSet<T> implements SortedSe
   @SafeVarargs
   public static <T> SortedLinkedSet<T> of(Comparator<T> comparator, T... elements) {
     SortedLinkedSet<T> sortedLinkedSet = new SortedLinkedSet<>(comparator);
-    sortedLinkedSet.insert(elements);
+    for (T element : elements) {
+      sortedLinkedSet.insert(element);
+    }
     return sortedLinkedSet;
   }
 
@@ -164,7 +166,13 @@ public class SortedLinkedSet<T> extends AbstractSortedSet<T> implements SortedSe
    */
   public static <T extends Comparable<? super T>> SortedLinkedSet<T> copyOf(SortedSet<T> that) {
     SortedLinkedSetBuilder<T> builder = new SortedLinkedSetBuilder<>(that.comparator());
-    throw new UnsupportedOperationException("Not implemented yet");
+    Iterator<T> elementsIterator = that.iterator();
+
+    for (int i = 0; i < that.size(); i++) {
+      builder.append(elementsIterator.next());
+    }
+
+    return builder.toSortedLinkedSet();
   }
 
   /**
@@ -313,7 +321,7 @@ public class SortedLinkedSet<T> extends AbstractSortedSet<T> implements SortedSe
     if (size == 0) throw new NoSuchElementException("NO ELEMENTS");
 
     Node<T> currentElement = first;
-    for (int i = 0; i < size; i++) {
+    for (int i = 0; i < size - 1; i++) {
       currentElement = currentElement.next;
     }
     return currentElement.element;
@@ -349,7 +357,7 @@ public class SortedLinkedSet<T> extends AbstractSortedSet<T> implements SortedSe
 
     @Override
     public boolean hasNext() {
-      return current.next == null;
+      return current != null;
     }
 
     @Override
@@ -393,7 +401,7 @@ public class SortedLinkedSet<T> extends AbstractSortedSet<T> implements SortedSe
     void append(T element) {
       assert first == null || comparator.compare(element, last.element) > 0;
 
-      Node<T> node = new Node<>(element);
+      Node<T> node = new Node<>(element, null);
       if (first == null) {
         first = node;
       } else {
@@ -548,6 +556,32 @@ public class SortedLinkedSet<T> extends AbstractSortedSet<T> implements SortedSe
 
     SortedLinkedSetBuilder<T> builder = new SortedLinkedSet.SortedLinkedSetBuilder<>(comparator);
 
-    return null;
+    Iterator<T> iteratorSet1 = sortedSet1.iterator();
+    Iterator<T> iteratorSet2 = sortedSet2.iterator();
+
+    T elementSet1 = nextOrNull(iteratorSet1);
+    T elementSet2 = nextOrNull(iteratorSet2);
+
+    while(elementSet1 != null && elementSet2 != null) {
+      int comparison = sortedSet1.comparator().compare(elementSet1, elementSet2);
+
+      if (comparison == 0) {
+        elementSet1 = nextOrNull(iteratorSet1);
+        elementSet2 = nextOrNull(iteratorSet2);
+      } else if (comparison > 0) {
+        elementSet2 = nextOrNull(iteratorSet2);
+      } else {
+        builder.append(elementSet1);
+        elementSet1 = nextOrNull(iteratorSet1);
+      }
+
+    }
+
+    while(elementSet1 != null) {
+      builder.append(elementSet1);
+      elementSet1 = nextOrNull(iteratorSet1);
+    }
+
+    return builder.toSortedLinkedSet();
   }
 }

@@ -232,7 +232,7 @@ public class BinaryHeap<T> implements Heap<T> {
    */
   @Override
   public Comparator<T> comparator() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    return this.comparator;
   }
 
   /**
@@ -241,7 +241,7 @@ public class BinaryHeap<T> implements Heap<T> {
    */
   @Override
   public boolean isEmpty() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    return this.size == 0;
   }
 
   /**
@@ -250,7 +250,7 @@ public class BinaryHeap<T> implements Heap<T> {
    */
   @Override
   public int size() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    return this.size;
   }
 
   /**
@@ -259,7 +259,10 @@ public class BinaryHeap<T> implements Heap<T> {
    */
   @Override
   public void clear() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    for (int i = 0; i < size; i++) {
+      elements[i] = null;
+    }
+    size = 0;
   }
 
   /**
@@ -278,53 +281,59 @@ public class BinaryHeap<T> implements Heap<T> {
    */
   @Override
   public void insert(T element) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    ensureCapacity();
+    elements[size] = element;
+    heapifyUp(size);
+    size++;
   }
 
   // Checks if elements[index1] < elements[index2]
   private boolean lessThan(int index1, int index2) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    return this.comparator.compare(elements[index1], elements[index2]) < 0;
   }
 
   // Swaps elements in array at positions index1 and index2
   private void swap(int index1, int index2) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    T auxiliar = elements[index1];
+    elements[index1] = elements[index2];
+    elements[index2] = auxiliar;
   }
 
   // Checks if the given index is the root of the heap
   private static boolean isRoot(int index) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    return index == ROOT_INDEX;
   }
 
   // Returns the index for the parent of the node with the given index
   private static int parent(int index) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    return (index - 1) / 2;
   }
 
   // Returns the index for the left child of the node with the given index
   private static int leftChild(int index) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    return index * 2 + 1;
   }
 
   // Returns the index for the right child of the node with the given index
   private static int rightChild(int index) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    return index * 2 + 2;
   }
 
   // Checks if the given index corresponds to a node in the heap
   private boolean isNode(int index) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    return index < size;
   }
 
   // Checks if the node with the given index has a left child
   private boolean hasLeftChild(int index) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    int leftChildIndex = leftChild(index);
+    return leftChildIndex < size;
   }
 
   // Checks if the node with the given index is a leaf node
   // !hasLeftChild(index) => !hasRightChild(index) as tree is complete
   private boolean isLeaf(int index) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    return !hasLeftChild(index);
   }
 
   /**
@@ -333,7 +342,13 @@ public class BinaryHeap<T> implements Heap<T> {
    * @param index The index of the element to move.
    */
   private void heapifyUp(int index) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    int parentPosition = parent(index);
+
+    while ( !isRoot(index) && lessThan(index, parentPosition) ) {
+      swap(index, parentPosition);
+      index = parentPosition;
+      parentPosition = parent(index);
+    }
   }
 
   /**
@@ -344,7 +359,8 @@ public class BinaryHeap<T> implements Heap<T> {
    */
   @Override
   public T minimum() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    if (isEmpty()) throw new EmptyHeapException();
+    return elements[0];
   }
 
   /**
@@ -353,7 +369,53 @@ public class BinaryHeap<T> implements Heap<T> {
    * @param index The index of the element to move.
    */
   private void heapifyDown(int index) {
-    throw new UnsupportedOperationException("Not implemented yet");
+//    int leftChild = leftChild(index);
+//    int rightChild = rightChild(index);
+//    boolean heap = false;
+//
+//    if (leftChild < size && lessThan(leftChild, index)) {
+//      if (rightChild < size && lessThan(rightChild, index)) {
+//        heap = true;
+//      } else if (rightChild >= size) {
+//        heap = true;
+//      }
+//    }
+//
+//    while( !isLeaf(index) && !heap) {
+//      int minChild = leftChild;
+//      if (rightChild < size) {
+//        minChild = lessThan(rightChild, leftChild) ? rightChild : leftChild;
+//      }
+//      swap(leftChild, index);
+//
+//      index = leftChild;
+//      leftChild = leftChild(index);
+//      rightChild = rightChild(index);
+//
+//      if (leftChild < size && lessThan(leftChild, index)) {
+//        if (rightChild < size && lessThan(rightChild, index)) {
+//          heap = true;
+//        } else if (rightChild >= size) {
+//          heap = true;
+//        }
+//      }
+//    }
+
+    while (!isRoot(index)) {
+      int chosenChild  = leftChild(index);
+      int rightChild = rightChild(index);
+
+      if (isNode(rightChild) && lessThan(rightChild, chosenChild)) {
+        chosenChild = rightChild;
+      }
+
+      if (!lessThan(index, chosenChild)) {
+        swap(index, chosenChild);
+        index = chosenChild;
+      } else {
+        break;
+      }
+    }
   }
 
   /**
@@ -364,7 +426,11 @@ public class BinaryHeap<T> implements Heap<T> {
    */
   @Override
   public void deleteMinimum() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    if (isEmpty()) throw new EmptyHeapException();
+    elements[0] = elements[size - 1];
+    elements[size - 1] = null;
+    size--;
+    heapifyDown(0);
   }
 
   /**

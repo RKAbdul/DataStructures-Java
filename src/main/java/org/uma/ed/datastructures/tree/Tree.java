@@ -3,10 +3,10 @@ package org.uma.ed.datastructures.tree;
 import org.uma.ed.datastructures.list.ArrayList;
 import org.uma.ed.datastructures.list.List;
 import org.uma.ed.datastructures.queue.ArrayQueue;
-import org.uma.ed.datastructures.queue.Queue;
 
 import java.util.Comparator;
 import java.util.NoSuchElementException;
+import java.util.Queue;
 
 
 /**
@@ -62,7 +62,15 @@ public class Tree {
    * @return The number of nodes in the tree.
    */
   public static int size(Node<?> root) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    int size = 1;
+    if (root == null) {
+      size = 0;
+    } else {
+      for (Node<?> child : root.children) {
+        size += size(child);
+      }
+    }
+    return size;
   }
 
   /**
@@ -73,7 +81,17 @@ public class Tree {
    * @return The height of the tree.
    */
   public static int height(Node<?> root) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    int height = 1;
+    if (root == null) {
+      height = 0;
+    } else {
+      for (Node<?> child : root.children) {
+        if (1 + height(child) > height) {
+          height = 1 + height(child);
+        }
+      }
+    }
+    return height;
   }
 
   /**
@@ -84,7 +102,15 @@ public class Tree {
    * @return The sum of elements in the tree.
    */
   public static int sum(Node<Integer> root) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    int totalSum = 0;
+    if (root != null) {
+      totalSum += root.element;
+      for (Node<Integer> child : root.children) {
+        totalSum += sum(child);
+      }
+    }
+
+    return totalSum;
   }
 
   /**
@@ -97,7 +123,20 @@ public class Tree {
    * @return The maximum element in the tree according to the comparator.
    */
   public static <T> T maximum(Node<T> root, Comparator<T> comparator) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    T maximum;
+    if (root == null) {
+      throw new NoSuchElementException();
+    } else {
+      maximum = root.element;
+      for (Node<T> child : root.children) {
+        T maximumOfChild = maximum(child, comparator);
+        if (comparator.compare(maximum, maximumOfChild) < 0) {
+          maximum = maximumOfChild;
+        }
+      }
+    }
+
+    return maximum;
   }
 
   /**
@@ -110,7 +149,12 @@ public class Tree {
    * @return The number of occurrences of the element in the tree.
    */
   public static <T> int count(Node<T> root, T element) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    if (root == null) throw new NoSuchElementException();
+    int count = root.element == element ? 1 : 0;
+    for (Node<T> child : root.children) {
+      count += count(child, element);
+    }
+    return count;
   }
 
   /**
@@ -137,7 +181,13 @@ public class Tree {
    * @param <T> The type of elements in the tree.
    */
   private static <T> void leaves(Node<T> root, List<T> leaves) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    if (root.children.isEmpty()) {
+      leaves.append(root.element);
+    } else {
+      for (Node<T> childRoot : root.children) {
+        leaves(childRoot, leaves);
+      }
+    }
   }
 
   /**
@@ -164,7 +214,12 @@ public class Tree {
    * @param <T> The type of elements in the tree.
    */
   private static <T> void preorder(Node<T> root, List<T> preorder) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    if (root != null) {
+      preorder.append(root.element);
+      for (int i = 0; i < root.children.size(); i++) {
+        preorder(root.children.get(i), preorder);
+      }
+    }
   }
 
   /**
@@ -191,7 +246,12 @@ public class Tree {
    * @param <T> The type of elements in the tree.
    */
   private static <T> void postorder(Node<T> root, List<T> postorder) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    if (root != null) {
+      for (int i = 0; i < root.children.size(); i++) {
+        postorder(root.children.get(i), postorder);
+      }
+      postorder.append(root.element);
+    }
   }
 
   /**
@@ -203,6 +263,21 @@ public class Tree {
    * @return A list with the breadth-first traversal of the tree.
    */
   public static <T> List<T> breadthFirst(Node<T> root) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    List<T> breadthFirst = ArrayList.empty();
+
+    ArrayQueue<Node<T>> newQueue = ArrayQueue.empty();
+    newQueue.enqueue(root);
+
+    while(!newQueue.isEmpty()) {
+      Node<T> current = newQueue.first();
+      newQueue.dequeue();
+      breadthFirst.append(current.element);
+
+      for (Node<T> child : current.children) {
+        newQueue.enqueue(child);
+      }
+    }
+
+    return breadthFirst;
   }
 }

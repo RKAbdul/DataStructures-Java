@@ -168,7 +168,7 @@ public class SortedLinkedDictionary<K, V> extends AbstractSortedDictionary<K, V>
    */
   @Override
   public boolean isEmpty() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    return size == 0;
   }
 
   /**
@@ -177,7 +177,7 @@ public class SortedLinkedDictionary<K, V> extends AbstractSortedDictionary<K, V>
    */
   @Override
   public int size() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    return size;
   }
 
   /**
@@ -221,7 +221,19 @@ public class SortedLinkedDictionary<K, V> extends AbstractSortedDictionary<K, V>
    */
   @Override
   public void insert(Entry<K, V> entry) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    Finder finder = new Finder( entry.key() );
+
+    if (!finder.found) {
+      Node<K, V> newNode = new Node<>( entry, finder.current);
+
+      if (finder.previous == null) {
+        this.first = newNode;
+      } else {
+        finder.previous.next = newNode;
+      }
+
+      size++;
+    }
   }
 
   /**
@@ -230,7 +242,9 @@ public class SortedLinkedDictionary<K, V> extends AbstractSortedDictionary<K, V>
    */
   @Override
   public V valueOf(K key) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    Finder finder = new Finder(key);
+
+    return finder.found ? finder.current.entry.value() : null;
   }
 
   /**
@@ -239,7 +253,9 @@ public class SortedLinkedDictionary<K, V> extends AbstractSortedDictionary<K, V>
    */
   @Override
   public boolean isDefinedAt(K key) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    Finder finder = new Finder(key);
+
+    return finder.found;
   }
 
   /**
@@ -248,7 +264,20 @@ public class SortedLinkedDictionary<K, V> extends AbstractSortedDictionary<K, V>
    */
   @Override
   public void delete(K key) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    Finder finder = new Finder(key);
+
+    if (finder.found) {
+      if (finder.previous == null) {
+        this.first = finder.current.next;
+      } else if (finder.current.next == null) {
+        this.last = finder.previous;
+        finder.previous.next = null;
+      } else {
+        finder.previous.next = finder.current.next;
+      }
+
+      size--;
+    }
   }
 
   /**
@@ -257,7 +286,9 @@ public class SortedLinkedDictionary<K, V> extends AbstractSortedDictionary<K, V>
    */
   @Override
   public void clear() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    this.first = null;
+    this.last = null;
+    this.size = 0;
   }
 
   /**
@@ -266,7 +297,8 @@ public class SortedLinkedDictionary<K, V> extends AbstractSortedDictionary<K, V>
    */
   @Override
   public Entry<K, V> minimum() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    if (isEmpty()) throw new NoSuchElementException();
+    return this.first.entry;
   }
 
   /**
@@ -275,7 +307,8 @@ public class SortedLinkedDictionary<K, V> extends AbstractSortedDictionary<K, V>
    */
   @Override
   public Entry<K, V> maximum() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    if (isEmpty()) throw new NoSuchElementException();
+    return this.last.entry;
   }
 
   /**

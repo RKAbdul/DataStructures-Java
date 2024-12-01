@@ -116,7 +116,26 @@ public class LinkedList<T> extends AbstractList<T> implements List<T> {
    * @return a new LinkedList with same elements and order as {@code that}.
    */
   public static <T> LinkedList<T> copyOf(List<T> that) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    int size = that.size();
+    LinkedList<T> linkedList = empty();
+
+    if (size > 0) {
+      Node<T> prevElement = new Node<>(that.get(0), null);
+      Node<T> lastElement = prevElement;
+      linkedList.first = prevElement;
+
+      for (int i = 1; i < size; i++) {
+        lastElement = new Node<>(that.get(i), null);
+        prevElement.next = lastElement;
+        prevElement = lastElement;
+      }
+
+      linkedList.last = lastElement;
+      linkedList.size = that.size();
+    }
+
+
+    return linkedList;
   }
 
   /**
@@ -125,7 +144,7 @@ public class LinkedList<T> extends AbstractList<T> implements List<T> {
    */
   @Override
   public boolean isEmpty() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    return this.size == 0;
   }
 
   /**
@@ -134,7 +153,7 @@ public class LinkedList<T> extends AbstractList<T> implements List<T> {
    */
   @Override
   public int size() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    return size;
   }
 
   /**
@@ -175,7 +194,12 @@ public class LinkedList<T> extends AbstractList<T> implements List<T> {
    */
   @Override
   public T get(int index) {
-    throw new UnsupportedOperationException("Not implemented yet");
+
+    validateIndex(index);
+
+    Node<T> node = atIndex(index);
+
+    return node.element;
   }
 
   /**
@@ -186,7 +210,11 @@ public class LinkedList<T> extends AbstractList<T> implements List<T> {
    */
   @Override
   public void set(int index, T element) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    validateIndex(index);
+
+    Node<T> node = atIndex(index);
+
+    node.element = element;
   }
 
   /**
@@ -195,7 +223,22 @@ public class LinkedList<T> extends AbstractList<T> implements List<T> {
    */
   @Override
   public void append(T element) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    Node<T> newNode = new Node<>(element, null);
+
+    //// CASE 1: LIST IS EMPTY
+
+    if ( isEmpty() )
+    {
+      this.first = newNode;
+    }
+    //// CASE 2: LIST IS NOT EMPTY
+    else
+    {
+      this.last.next = newNode;
+    }
+      this.last = newNode;
+
+      size++;
   }
 
   /**
@@ -204,7 +247,15 @@ public class LinkedList<T> extends AbstractList<T> implements List<T> {
    */
   @Override
   public void prepend(T element) {
-    throw new UnsupportedOperationException("Not implemented yet");
+
+    Node<T> newNode = new Node<>(element, this.first);
+    this.first = newNode;
+
+    if ( isEmpty() ) {
+      this.last = newNode;
+    }
+
+    size++;
   }
 
   /**
@@ -215,7 +266,21 @@ public class LinkedList<T> extends AbstractList<T> implements List<T> {
    */
   @Override
   public void insert(int index, T element) {
-    throw new UnsupportedOperationException("Not implemented yet");
+
+      if (index < 0 || index > size) throw new ListException("INVALID INDEX");
+
+      ///// CASE 1: AT POSITION 1
+
+      if (index == 0) {
+          prepend( element );
+      } else if (index == size) {
+          append( element );
+      } else {
+          Node<T> prevNode = atIndex( index - 1 );
+          Node<T> newNode = new Node<>(element, prevNode.next);
+          prevNode.next = newNode;
+          size++;
+      }
   }
 
   /**
@@ -226,7 +291,27 @@ public class LinkedList<T> extends AbstractList<T> implements List<T> {
    */
   @Override
   public void delete(int index) {
-    throw new UnsupportedOperationException("Not implemented yet");
+      validateIndex(index);
+
+      Node<T> node = atIndex(index);
+
+      if (size == 1) {
+          this.first = null;
+          this.last = null;
+      } else {
+        if (index == size - 1) {
+          Node<T> prevNode = atIndex(index - 1);
+          this.last = prevNode;
+          prevNode.next = null;
+        } else if (index == 0) {
+          this.first = first.next;
+        } else {
+          Node<T> prevNode = atIndex(index - 1);
+          prevNode.next = node.next;
+        }
+      }
+
+      size--;
   }
 
   /**
@@ -235,7 +320,9 @@ public class LinkedList<T> extends AbstractList<T> implements List<T> {
    */
   @Override
   public void clear() {
-    throw new UnsupportedOperationException("Not implemented yet");
+      this.last = null;
+      this.first = null;
+      size = 0;
   }
 
   /**

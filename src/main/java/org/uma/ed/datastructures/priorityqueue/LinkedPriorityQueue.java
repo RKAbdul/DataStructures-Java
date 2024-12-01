@@ -1,6 +1,7 @@
 package org.uma.ed.datastructures.priorityqueue;
 
 import java.util.Comparator;
+import java.util.NoSuchElementException;
 
 /**
  * Priority queue implemented as a sorted linked structure.
@@ -113,7 +114,7 @@ public class LinkedPriorityQueue<T> extends AbstractPriorityQueue<T> implements 
    */
   @Override
   public boolean isEmpty() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    return size == 0;
   }
 
   /**
@@ -122,7 +123,7 @@ public class LinkedPriorityQueue<T> extends AbstractPriorityQueue<T> implements 
    */
   @Override
   public int size() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    return size;
   }
 
   /**
@@ -132,7 +133,29 @@ public class LinkedPriorityQueue<T> extends AbstractPriorityQueue<T> implements 
    */
   @Override
   public void enqueue(T element) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    Node<T> toAdd = new Node<>(element, null);
+
+    if ( isEmpty() ) {
+      this.first = toAdd;
+    } else {
+      Node<T> prevElement = null;
+      Node<T> currElement = this.first;
+
+      while (currElement != null && this.comparator.compare(element, currElement.element) >= 0) {
+        prevElement = currElement;
+        currElement = currElement.next;
+      }
+
+      toAdd.next = currElement;
+
+      if (prevElement != null) {
+        prevElement.next = toAdd;
+      } else {
+        this.first = toAdd;
+      }
+
+    }
+    size++;
   }
 
   /**
@@ -143,7 +166,7 @@ public class LinkedPriorityQueue<T> extends AbstractPriorityQueue<T> implements 
    */
   @Override
   public T first() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    return this.first.element;
   }
 
   /**
@@ -154,7 +177,10 @@ public class LinkedPriorityQueue<T> extends AbstractPriorityQueue<T> implements 
    */
   @Override
   public void dequeue() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    if ( isEmpty() ) throw new NoSuchElementException();
+
+    this.first = this.first.next;
+    size--;
   }
 
   /**
@@ -163,7 +189,8 @@ public class LinkedPriorityQueue<T> extends AbstractPriorityQueue<T> implements 
    */
   @Override
   public void clear() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    this.first = null;
+    size = 0;
   }
 
   /**

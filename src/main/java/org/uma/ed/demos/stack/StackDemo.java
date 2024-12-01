@@ -12,6 +12,7 @@ import org.uma.ed.datastructures.stack.Stack;
  */
 public class StackDemo {
   public static void main(String[] args) {
+
     Stack<Integer> stack1 = LinkedStack.empty();
     stack1.push(1);
     stack1.push(2);
@@ -36,11 +37,18 @@ public class StackDemo {
     System.out.println();
 
     System.out.println(stack1.equals(stack2));
-    System.out.println(stack1.equals(stack3));
+   System.out.println(stack1.equals(stack3));
     System.out.println(stack2.equals(stack3));
     System.out.println();
 
     Stack<Integer> stack4 = ArrayStack.from(Range.inclusive(0, 10, 2));
     System.out.println(stack4);
+
+    stack2.clear();
+    System.out.println(stack2);
+
+    stack2.push(2);
+    System.out.println(stack2);
+
   }
 }

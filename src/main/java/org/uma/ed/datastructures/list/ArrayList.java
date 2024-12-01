@@ -10,7 +10,7 @@ public class ArrayList<T> extends AbstractList<T> implements List<T> {
   private int size;
 
   public ArrayList(int initialCapacity) {
-    if (initialCapacity <= 0) {
+    if (initialCapacity < 0) {
       throw new IllegalArgumentException("initial capacity must be greater than 0");
     }
     elements = (T[]) new Object[initialCapacity];

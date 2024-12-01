@@ -41,18 +41,18 @@ public class HeapDemo {
 //    printHeapInOrder(heap3);
 //    System.out.println();
 
-    Integer[] array = {10, 2, 13, 0, 5, 7, 10, 3, 1, 6};
-    Random rnd = new Random();
-
-    int numberOfTests = 10000;
-    for (int test = 0; test < numberOfTests; test++) {
-      // shuffle array
-      for (int i = 0; i < array.length; i++) {
-        int j = i + rnd.nextInt(array.length - i);
-        int temp = array[j];
-        array[j] = array[i];
-        array[i] = temp;
-      }
+//    Integer[] array = {10, 2, 13, 0, 5, 7, 10, 3, 1, 6};
+//    Random rnd = new Random();
+//
+//    int numberOfTests = 10000;
+//    for (int test = 0; test < numberOfTests; test++) {
+//      // shuffle array
+//      for (int i = 0; i < array.length; i++) {
+//        int j = i + rnd.nextInt(array.length - i);
+//        int temp = array[j];
+//        array[j] = array[i];
+//        array[i] = temp;
+//      }
 
       // System.out.println("Array: " + Arrays.toString(array));
 //      Heap<Integer> heap = BinaryHeap.from(Arrays.asList(array));
@@ -69,7 +69,7 @@ public class HeapDemo {
 //        previous = next;
 //        heap.deleteMinimum();
 //      }
-    }
-    System.out.println("All tests passed");
+//    }
+//    System.out.println("All tests passed");
   }
 }

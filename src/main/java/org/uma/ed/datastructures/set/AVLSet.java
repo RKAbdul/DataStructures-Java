@@ -123,7 +123,7 @@ public class AVLSet<T> extends AbstractSortedSet<T> implements SortedSet<T> {
     return from(
             that.comparator(), that.avlTree.inOrder()
     );
-    // return new AVLSet<>()
+    // return new AVLSet<>(copyof(that.avlTree))
   }
 
   /**

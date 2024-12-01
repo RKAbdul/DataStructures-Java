@@ -1,3 +1,5 @@
+package org.uma.ed.datastructures.tree;
+
 import org.junit.jupiter.api.Test;
 import org.uma.ed.datastructures.list.List;
 import org.uma.ed.datastructures.tree.Tree;

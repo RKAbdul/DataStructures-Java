@@ -68,7 +68,7 @@ public class ArrayStack<T> extends AbstractStack<T> implements Stack<T> {
    * @return an empty ArrayStack.
    */
   public static <T> ArrayStack<T> empty() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    return new ArrayStack<>();
   }
 
   /**
@@ -81,7 +81,8 @@ public class ArrayStack<T> extends AbstractStack<T> implements Stack<T> {
    * @throws IllegalArgumentException if initial capacity is less than 1.
    */
   public static <T> ArrayStack<T> withCapacity(int initialCapacity) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    if (initialCapacity <= 0) throw new UnsupportedOperationException("INITIAL CAPACITY SHOULD BE GREATER THAN 0");
+    return new ArrayStack<>(initialCapacity);
   }
 
   /**
@@ -95,7 +96,11 @@ public class ArrayStack<T> extends AbstractStack<T> implements Stack<T> {
    */
   @SafeVarargs
   public static <T> ArrayStack<T> of(T... elements) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    ArrayStack<T> arrayStack = empty();
+    for (T element : elements) {
+      arrayStack.push(element);
+    }
+    return arrayStack;
   }
 
   /**
@@ -124,7 +129,17 @@ public class ArrayStack<T> extends AbstractStack<T> implements Stack<T> {
    * @return a new ArrayStack with same elements and order as {@code that}.
    */
   public static <T> ArrayStack<T> copyOf(ArrayStack<T> that) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    /*
+        ArrayStack<T> copy = ArrayStack.withCapacity(that.size() == 0 ? DEFAULT_INITIAL_CAPACITY : that.size());
+
+        for (int i = 0; i < that.size; i++) {
+            copy.push(that.elements[i]);
+        }
+
+        return copy;
+     */
+
+    return of(that.elements);
   }
 
   /**
@@ -135,7 +150,27 @@ public class ArrayStack<T> extends AbstractStack<T> implements Stack<T> {
    * @return a new ArrayStack with same elements and order as {@code that}.
    */
   public static <T> ArrayStack<T> copyOf(Stack<T> that) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    ArrayStack<T> copy = ArrayStack.withCapacity( that.isEmpty() ? DEFAULT_INITIAL_CAPACITY : that.size() );
+    while (!that.isEmpty()){
+      T element = that.top();
+      copy.push(element);
+      that.pop();
+    }
+    // reverse the order of the array
+    // HOMEWORK:
+
+    for (int i = 0; i < copy.size() % 2; i++) {
+      T aux = copy.elements[i];
+      copy.elements[i] = copy.elements[copy.size() - 1 - i];
+      copy.elements[copy.size() - 1 -i] = aux;
+    }
+
+    // recover the original ArrayStack
+    for (int i = 0; i < copy.size(); i++) {
+      that.push(copy.elements[i]);
+    }
+
+    return copy;
   }
 
   /**
@@ -144,7 +179,7 @@ public class ArrayStack<T> extends AbstractStack<T> implements Stack<T> {
    */
   @Override
   public boolean isEmpty() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    return size == 0;
   }
 
   /**
@@ -153,7 +188,7 @@ public class ArrayStack<T> extends AbstractStack<T> implements Stack<T> {
    */
   @Override
   public int size() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    return size;
   }
 
   /**
@@ -172,7 +207,9 @@ public class ArrayStack<T> extends AbstractStack<T> implements Stack<T> {
    */
   @Override
   public void push(T element) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    ensureCapacity();
+    elements[size] = element;
+    size++;
   }
 
   /**
@@ -183,7 +220,8 @@ public class ArrayStack<T> extends AbstractStack<T> implements Stack<T> {
    */
   @Override
   public T top() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    if (isEmpty()) throw new EmptyStackException("top on empty stack");
+    return elements[size - 1];
   }
 
   /**
@@ -194,7 +232,9 @@ public class ArrayStack<T> extends AbstractStack<T> implements Stack<T> {
    */
   @Override
   public void pop() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    if (isEmpty()) throw new EmptyStackException("pop on empty stack");
+    elements[size - 1] = null;
+    size--;
   }
 
   /**
@@ -203,7 +243,10 @@ public class ArrayStack<T> extends AbstractStack<T> implements Stack<T> {
    */
   @Override
   public void clear() {
-    throw new UnsupportedOperationException("Not implemented yet");
+      for (int i = 0; i < size; i++) {
+          elements[i] = null;
+      }
+      size = 0;
   }
 
   /**

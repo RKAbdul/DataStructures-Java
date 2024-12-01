@@ -84,10 +84,10 @@ public class WBLeftistHeap<T> implements Heap<T> {
     {
       while (size > 1)
       {
-        for (int i = 0, j = 0; i < size; i += 2, j++)
+        for (int i = 0, j = 0; i < size - 1; i += 2, j++)
         {
           Node<T> node1 = nodes.get(i);
-          Node<T> node2 = nodes.get(i+2);
+          Node<T> node2 = nodes.get(i+1);
           Node<T> m = heap.merge(node1, node2);
           nodes.set(j, m);
         }

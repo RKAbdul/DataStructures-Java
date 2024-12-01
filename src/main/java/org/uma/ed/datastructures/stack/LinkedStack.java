@@ -107,7 +107,7 @@ public class LinkedStack<T> extends AbstractStack<T> implements Stack<T> {
    * @return a new LinkedStack with same elements and order as {@code that}.
    */
   public static <T> LinkedStack<T> copyOf(LinkedStack<T> that) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    return from(that.elements());
   }
 
   /**
@@ -119,7 +119,25 @@ public class LinkedStack<T> extends AbstractStack<T> implements Stack<T> {
    * @return a new LinkedStack with same elements and order as {@code that}.
    */
   public static <T> LinkedStack<T> copyOf(Stack<T> that) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    LinkedStack<T> linkedStack = new LinkedStack<>();
+    LinkedStack<T> auxLinkedStack = new LinkedStack<>();
+
+    while (!that.isEmpty()) {
+      auxLinkedStack.push(that.top());
+      that.pop();
+    }
+
+    while(!auxLinkedStack.isEmpty())
+    {
+      T element = auxLinkedStack.top();
+
+      linkedStack.push(element);
+      that.push(element);
+
+      auxLinkedStack.pop();
+    }
+
+    return linkedStack;
   }
 
   /**
@@ -128,7 +146,7 @@ public class LinkedStack<T> extends AbstractStack<T> implements Stack<T> {
    */
   @Override
   public boolean isEmpty() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    return size == 0;
   }
 
   /**
@@ -137,7 +155,7 @@ public class LinkedStack<T> extends AbstractStack<T> implements Stack<T> {
    */
   @Override
   public int size() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    return size;
   }
 
   /**
@@ -146,7 +164,9 @@ public class LinkedStack<T> extends AbstractStack<T> implements Stack<T> {
    */
   @Override
   public void push(T element) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    Node<T> newNode = new Node<>(element, top);
+    top = newNode;
+    size++;
   }
 
   /**
@@ -157,7 +177,8 @@ public class LinkedStack<T> extends AbstractStack<T> implements Stack<T> {
    */
   @Override
   public T top() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    if (isEmpty()) throw new EmptyStackException("top on empty stack");
+    return top.element;
   }
 
   /**
@@ -168,7 +189,9 @@ public class LinkedStack<T> extends AbstractStack<T> implements Stack<T> {
    */
   @Override
   public void pop() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    if (isEmpty()) throw new EmptyStackException("pop on empty stack");
+    size--;
+    top = top.next;
   }
 
   /**
@@ -177,7 +200,8 @@ public class LinkedStack<T> extends AbstractStack<T> implements Stack<T> {
    */
   @Override
   public void clear() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    this.top = null;
+    size = 0;
   }
 
   /**
