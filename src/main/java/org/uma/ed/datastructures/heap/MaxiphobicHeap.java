@@ -98,10 +98,10 @@ public class MaxiphobicHeap<T> implements Heap<T> {
     {
       while (size > 1)
       {
-        for (int i = 0, j = 0; i < size; i += 2, j++)
+        for (int i = 0, j = 0; i < size - 1; i += 2, j++)
         {
           MaxiphobicHeap.Node<T> node1 = nodes.get(i);
-          MaxiphobicHeap.Node<T> node2 = nodes.get(i+2);
+          MaxiphobicHeap.Node<T> node2 = nodes.get(i+1);
           MaxiphobicHeap.Node<T> m = heap.merge(node1, node2);
           nodes.set(j, m);
         }

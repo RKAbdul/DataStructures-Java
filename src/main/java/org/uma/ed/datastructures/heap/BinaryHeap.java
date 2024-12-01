@@ -401,7 +401,7 @@ public class BinaryHeap<T> implements Heap<T> {
 //      }
 //    }
 
-    while (!isRoot(index)) {
+    while (!isLeaf(index)) {
       int chosenChild  = leftChild(index);
       int rightChild = rightChild(index);
 

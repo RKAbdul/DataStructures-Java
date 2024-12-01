@@ -26,50 +26,50 @@ public class HeapDemo {
   public static void main(String[] args) {
     List<Integer> list = ArrayList.of(10, 2, 13, 0, 5, 7, 10, 3, 1, 6);
 
-//    Heap<Integer> heap1 = BinaryHeap.from(list);
-//    System.out.println(heap1);
-//    printHeapInOrder(heap1);
-//    System.out.println();
+    Heap<Integer> heap1 = BinaryHeap.from(list);
+    System.out.println(heap1);
+    printHeapInOrder(heap1);
+    System.out.println();
 
     Heap<Integer> heap2 = WBLeftistHeap.from(list);
     System.out.println(heap2);
     printHeapInOrder(heap2);
     System.out.println();
 
-//    Heap<Integer> heap3 = MaxiphobicHeap.from(list);
-//    System.out.println(heap3);
-//    printHeapInOrder(heap3);
-//    System.out.println();
+    Heap<Integer> heap3 = MaxiphobicHeap.from(list);
+    System.out.println(heap3);
+    printHeapInOrder(heap3);
+    System.out.println();
 
-//    Integer[] array = {10, 2, 13, 0, 5, 7, 10, 3, 1, 6};
-//    Random rnd = new Random();
-//
-//    int numberOfTests = 10000;
-//    for (int test = 0; test < numberOfTests; test++) {
-//      // shuffle array
-//      for (int i = 0; i < array.length; i++) {
-//        int j = i + rnd.nextInt(array.length - i);
-//        int temp = array[j];
-//        array[j] = array[i];
-//        array[i] = temp;
-//      }
+    Integer[] array = {10, 2, 13, 0, 5, 7, 10, 3, 1, 6};
+    Random rnd = new Random();
 
-      // System.out.println("Array: " + Arrays.toString(array));
-//      Heap<Integer> heap = BinaryHeap.from(Arrays.asList(array));
-      // System.out.println("Heap: " + heap);
+    int numberOfTests = 10000;
+    for (int test = 0; test < numberOfTests; test++) {
+      // shuffle array
+      for (int i = 0; i < array.length; i++) {
+        int j = i + rnd.nextInt(array.length - i);
+        int temp = array[j];
+        array[j] = array[i];
+        array[i] = temp;
+      }
+
+       System.out.println("Array: " + Arrays.toString(array));
+      Heap<Integer> heap = BinaryHeap.from(Arrays.asList(array));
+       System.out.println("Heap: " + heap);
 
       // check heap elements are extracted in increasing order
-//      int previous = -1;
-//      while (!heap.isEmpty()) {
-//        int next = heap.minimum();
-//        if (next < previous) {
-//          System.out.println("Error: " + previous + " >= " + next);
-//          System.exit(1);
-//        }
-//        previous = next;
-//        heap.deleteMinimum();
-//      }
-//    }
-//    System.out.println("All tests passed");
+      int previous = -1;
+      while (!heap.isEmpty()) {
+        int next = heap.minimum();
+        if (next < previous) {
+          System.out.println("Error: " + previous + " >= " + next);
+          System.exit(1);
+        }
+        previous = next;
+        heap.deleteMinimum();
+      }
+    }
+    System.out.println("All tests passed");
   }
 }
