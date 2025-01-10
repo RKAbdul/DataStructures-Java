@@ -124,7 +124,7 @@ public class MaxiphobicHeapPriorityQueue<T> extends AbstractPriorityQueue<T> imp
    */
   @Override
   public void dequeue() {
-    if (isEmpty()) throw new EmptyPriorityQueueException("empty");
+    if ( isEmpty() ) throw new EmptyPriorityQueueException("empty");
     heap.deleteMinimum();
   }
 

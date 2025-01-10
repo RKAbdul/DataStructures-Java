@@ -82,7 +82,10 @@ public class BinaryTree {
    * @return The number of nodes in the tree.
    */
   public static int size(Node<?> root) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    int size = 1;
+    if (root.left != null) size += size(root.left);
+    if (root.right != null) size += size(root.right);
+    return size;
   }
 
   /**
@@ -93,7 +96,14 @@ public class BinaryTree {
    * @return The height of the tree.
    */
   public static int height(Node<?> root) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    int height = 1;
+    if (root.left != null) {
+      height = 1 + height(root.left);
+    }
+    if (root.right != null) {
+      height = Math.max(height, 1 + height(root.right));
+    }
+    return height;
   }
 
   /**
@@ -104,7 +114,10 @@ public class BinaryTree {
    * @return The sum of the elements in the tree.
    */
   public static int sum(Node<Integer> root) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    int sum = root.element;
+    if (root.right != null) sum += sum(root.right);
+    if (root.left != null) sum += sum(root.left);
+    return sum;
   }
 
   /**
@@ -116,7 +129,20 @@ public class BinaryTree {
    * @return The maximum element in the tree.
    */
   public static int maximum(Node<Integer> root, Comparator<Integer> comparator) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    int currentMaximum = root.element;
+    if (root.left != null) {
+      int leftChildMax = maximum(root.left, comparator);
+      if ( comparator.compare(currentMaximum, leftChildMax) < 0 ) {
+        currentMaximum = leftChildMax;
+      }
+    }
+    if (root.right != null) {
+      int rightChildMax = maximum(root.right, comparator);
+      if ( comparator.compare(currentMaximum, rightChildMax) < 0 ) {
+        currentMaximum = rightChildMax;
+      }
+    }
+    return currentMaximum;
   }
 
   /**
@@ -128,7 +154,10 @@ public class BinaryTree {
    * @return The number of times the element appears in the tree.
    */
   public static int count(Node<Integer> root, int element) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    int count = root.element == element ? 1 : 0;
+    if (root.left != null) count += count(root.left, element);
+    if (root.right != null) count += count(root.right, element);
+    return count;
   }
 
   /**
@@ -152,7 +181,12 @@ public class BinaryTree {
    * @param <T> The type of elements in the tree.
    */
   private static <T> void leaves(Node<T> root, List<T> leaves) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    if (root.right == null && root.left == null) {
+      leaves.append(root.element);
+    } else {
+      if (root.right != null) leaves(root.right, leaves);
+      if (root.left != null) leaves(root.left, leaves);
+    }
   }
 
   /**
@@ -176,7 +210,9 @@ public class BinaryTree {
    * @param <T> The type of elements in the tree.
    */
   private static <T> void preorder(Node<T> root, List<T> traversal) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    traversal.append(root.element);
+    if (root.left != null) preorder(root.left, traversal);
+    if (root.right != null) preorder(root.right, traversal);
   }
 
   /**
@@ -235,6 +271,20 @@ public class BinaryTree {
    * @return The breadth-first traversal of the tree.
    */
   public static <T> List<T> breadthFirst(Node<T> root) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    List<T> arrayList = ArrayList.empty();
+
+    Queue<Node<T>> queue = ArrayQueue.empty();
+    queue.enqueue(root);
+
+    while (!queue.isEmpty()) {
+      Node<T> currElement = queue.first();
+      queue.dequeue();
+
+      arrayList.append(currElement.element);
+      if (currElement.right != null) queue.enqueue(currElement.right);
+      if (currElement.left != null) queue.enqueue(currElement.left);
+    }
+
+    return arrayList;
   }
 }
