@@ -1,5 +1,6 @@
 package org.uma.ed.datastructures.graph;
 
+import java.util.NoSuchElementException;
 import java.util.StringJoiner;
 import org.uma.ed.datastructures.dictionary.Dictionary;
 import org.uma.ed.datastructures.dictionary.JDKHashDictionary;
@@ -65,7 +66,7 @@ public class DictionaryGraph<V> implements Graph<V> {
    * @return A DictionaryGraph with same vertices and edges as given graph.
    */
   public static <V> DictionaryGraph<V> copyOf(Graph<V> graph) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    return DictionaryGraph.of(graph.vertices(), graph.edges());
   }
 
   /**
@@ -108,7 +109,14 @@ public class DictionaryGraph<V> implements Graph<V> {
   }
 
   private void deleteDiEdge(V source, V destination) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    if (!vertices.contains(source)) {
+      throw new IllegalArgumentException("Vertex " + source + " is not in graph");
+    }
+    if (!vertices.contains(destination)) {
+      throw new IllegalArgumentException("Vertex " + destination + " is not in graph");
+    }
+
+    diEdges.valueOf(source).delete(destination);
   }
 
   /**
@@ -116,7 +124,8 @@ public class DictionaryGraph<V> implements Graph<V> {
    */
   @Override
   public void deleteEdge(V vertex1, V vertex2) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    deleteDiEdge(vertex1, vertex2);
+    deleteDiEdge(vertex2, vertex1);
   }
 
   /**
@@ -124,7 +133,14 @@ public class DictionaryGraph<V> implements Graph<V> {
    */
   @Override
   public void deleteVertex(V vertex) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    if (!vertices.contains(vertex)) throw new NoSuchElementException();
+
+    diEdges.delete(vertex);
+    vertices.delete(vertex);
+
+    for (var entries : diEdges.entries() ) {
+      entries.value().delete(vertex);
+    }
   }
 
   /**
@@ -132,7 +148,7 @@ public class DictionaryGraph<V> implements Graph<V> {
    */
   @Override
   public Set<V> vertices() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    return vertices;
   }
 
   /**
@@ -140,7 +156,15 @@ public class DictionaryGraph<V> implements Graph<V> {
    */
   @Override
   public Set<Edge<V>> edges() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    Set<Edge<V>> setToReturn = JDKHashSet.empty();
+
+    for ( var entry : diEdges.entries() ) {
+      for ( var edge : entry.value() ) {
+        setToReturn.insert( Edge.of( entry.key(), edge ) );
+      }
+    }
+
+    return setToReturn;
   }
 
   /**
@@ -148,7 +172,7 @@ public class DictionaryGraph<V> implements Graph<V> {
    */
   @Override
   public int numberOfVertices() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    return vertices.size();
   }
 
   /**
@@ -156,7 +180,7 @@ public class DictionaryGraph<V> implements Graph<V> {
    */
   @Override
   public int numberOfEdges() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    return edges().size();
   }
 
   /**
@@ -168,7 +192,7 @@ public class DictionaryGraph<V> implements Graph<V> {
    */
   @Override
   public Set<V> successors(V vertex) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    return diEdges.valueOf(vertex);
   }
 
   /**
@@ -176,7 +200,7 @@ public class DictionaryGraph<V> implements Graph<V> {
    */
   @Override
   public int degree(V vertex) {
-    throw new UnsupportedOperationException("Not implemented yet");
+    return successors(vertex).size();
   }
 
   @Override

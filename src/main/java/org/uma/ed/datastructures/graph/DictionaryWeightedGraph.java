@@ -189,7 +189,17 @@ public class DictionaryWeightedGraph<V, W> implements WeightedGraph<V, W> {
         weightedEdges.insert(WeightedEdge.of(entry1.key(), entry2.key(), entry2.value()));
       }
     }
-    return weightedEdges;
+
+
+
+    Set<WeightedEdge<V, W>> setToReturn = JDKHashSet.empty();
+    for (var entry : dictionary.entries() ) {
+      for (var edge : entry.value().entries() ) {
+        setToReturn.insert( WeightedEdge.of(entry.key(), edge.key(), edge.value() ) );
+      }
+    }
+
+    return setToReturn;
   }
 
   /**

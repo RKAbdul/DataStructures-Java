@@ -57,8 +57,8 @@ public class Dijkstra {
 
     while (!vertices.isEmpty()) {
       PriorityQueue<Extension> priorityQueue = JDKPriorityQueue.empty();
-      for (V vertex : verticesOpt) {
-        for (var succ : weightedGraph.successors(vertex)) {
+      for ( V vertex : verticesOpt ) {
+        for ( var succ : weightedGraph.successors(vertex) ) {
           V destination = succ.vertex();
           Integer weight = succ.weight();
 
